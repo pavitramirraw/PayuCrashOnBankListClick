@@ -1,7 +1,6 @@
 package com.payu.sdk;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -64,6 +63,7 @@ public class PaymentOptionsActivity extends FragmentActivity implements PaymentL
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
+
     @Override
     public void onPaymentOptionSelected(PayU.PaymentMode paymentMode) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -129,7 +129,7 @@ public class PaymentOptionsActivity extends FragmentActivity implements PaymentL
 //        requiredParams.put("service_provider", "payu_paisa");
 
         builder.set(PayU.MODE, String.valueOf(PayU.PaymentMode.PAYU_MONEY));
-        for(String key : getIntent().getExtras().keySet()) {
+        for (String key : getIntent().getExtras().keySet()) {
             builder.set(key, String.valueOf(getIntent().getExtras().get(key)));
             requiredParams.put(key, builder.get(key));
         }
@@ -144,7 +144,8 @@ public class PaymentOptionsActivity extends FragmentActivity implements PaymentL
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        startActivityForResult(intent, PayU.RESULT);    }
+        startActivityForResult(intent, PayU.RESULT);
+    }
 
     @Override
     public void onGetResponse(String responseMessage) {

@@ -5,7 +5,7 @@ package com.payu.sdk;
  */
 public class Constants {
 
-    public static final boolean DEBUG = false; // true for test env, false for prod env.
+    public static final boolean DEBUG = true; // true for test env, false for prod env.
     public static final boolean SDK_HASH_GENERATION = false;
 
     public static final boolean ENABLE_VAS = true;
@@ -45,7 +45,7 @@ public class Constants {
 
 
     // mobile dedicated test env
-    private static final String TEST_PAYMENT_URL =  "https://mobiletest.payu.in/_payment";
+    private static final String TEST_PAYMENT_URL = "https://mobiletest.payu.in/_payment";
     private static final String TEST_FETCH_DATA_URL = "https://mobiletest.payu.in/merchant/postservice?form=2";
 
     // production

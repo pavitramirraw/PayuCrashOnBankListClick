@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.params);
                 final HashMap<String, String> params = new HashMap<String, String>();
                 double amount = 10;
-                for (int i = 0; i < linearLayout.getChildCount() - 3; i++) {
+                for (int i = 0; i < linearLayout.getChildCount() - 4; i++) {
                     LinearLayout param = (LinearLayout) linearLayout.getChildAt(i);
                     if (((TextView) param.getChildAt(0)).getText().toString().equals("amount")) {
                         amount = Double.valueOf(((EditText) param.getChildAt(1)).getText().toString());
@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
                             postParams.add(new BasicNameValuePair("var1", params.get("txnid")));
                             postParams.add(new BasicNameValuePair("var2", String.valueOf(finalAmount)));
                             postParams.add(new BasicNameValuePair("var3", params.get("productinfo")));
-                            postParams.add(new BasicNameValuePair("var4", params.get("user_credentials")));
+                            //postParams.add(new BasicNameValuePair("var4", params.get("user_credentials")));
                             postParams.add(new BasicNameValuePair("hash", "payu"));
                             httppost.setEntity(new UrlEncodedFormEntity(postParams));
                             JSONObject response = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
@@ -129,15 +129,18 @@ public class MainActivity extends ActionBarActivity {
                                 PayU.vasHash = response.getJSONObject("result").getString("mobileSdk");
                                 PayU.ibiboCodeHash = response.getJSONObject("result").getString("detailsForMobileSdk");
 
-                                if (response.getJSONObject("result").has("deleteHash")) {
+                                Log.v("", "PAYMENT HASH: " + PayU.paymentHash);
+                                Log.v("", "VAS HASH: " + PayU.vasHash);
+                                Log.v("", "IBIBO HASH: " + PayU.ibiboCodeHash);
+                                /*if (response.getJSONObject("result").has("deleteHash")) {
                                     PayU.deleteCardHash = response.getJSONObject("result").getString("deleteHash");
                                     PayU.getUserCardHash = response.getJSONObject("result").getString("getUserCardHash");
                                     PayU.editUserCardHash = response.getJSONObject("result").getString("editUserCardHash");
                                     PayU.saveUserCardHash = response.getJSONObject("result").getString("saveUserCardHash");
-                                }
+                                }*/
 
                             }
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
 
                             PayU.getInstance(MainActivity.this).startPaymentProcess(finalAmount, params);
@@ -145,36 +148,36 @@ public class MainActivity extends ActionBarActivity {
 
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         } catch (ClientProtocolException e) {
                             e.printStackTrace();
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
                         } catch (PackageManager.NameNotFoundException e) {
                             e.printStackTrace();
-                            if(mProgressDialog != null && mProgressDialog.isShowing())
+                            if (mProgressDialog != null && mProgressDialog.isShowing())
                                 mProgressDialog.dismiss();
                         }
                         return null;
                     }
-                    }.execute();
+                }.execute();
             }
         });
 
         String version = "version 2.1 sms";
 
-        Toast.makeText(MainActivity.this, Constants.DEBUG ? "Debug build " + version   : "Production build " + version, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, Constants.DEBUG ? "Debug build " + version : "Production build " + version, Toast.LENGTH_SHORT).show();
         Toast.makeText(MainActivity.this, Constants.SDK_HASH_GENERATION ? "SDK is generating Hash " : "SDK fetches hash form API", Toast.LENGTH_SHORT).show();
     }
 
@@ -201,20 +204,20 @@ public class MainActivity extends ActionBarActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PayU.RESULT) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 //success
-                if(data != null )
+                if (data != null)
                     Toast.makeText(this, "Success" + data.getStringExtra("result"), Toast.LENGTH_LONG).show();
             }
             if (resultCode == RESULT_CANCELED) {
                 //failed
-                if(data != null)
+                if (data != null)
                     Toast.makeText(this, "Failed" + data.getStringExtra("result"), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public void next(View view){
+    public void next(View view) {
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.params);
         final Intent intent = new Intent(this, BaseActivity.class);
         for (int i = 0; i < linearLayout.getChildCount() - 3; i++) {
@@ -222,9 +225,9 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra(((TextView) param.getChildAt(0)).getText().toString(), ((EditText) param.getChildAt(1)).getText().toString());
         }
 
-        if(Constants.SDK_HASH_GENERATION) {
+        if (Constants.SDK_HASH_GENERATION) {
             startActivity(intent);
-        }else{
+        } else {
             // get the hash from server. lets try with http connector.
 
             /*postParams.add(new BasicNameValuePair("command", "mobileHashTestWs"));
